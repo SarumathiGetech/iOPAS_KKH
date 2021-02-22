@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>iOpas</title>
+ <script type="text/javascript" language ="JavaScript">
+javascript:window.history.forward(1);
+function MM_displayStatusMsg(msgStr) {
+    status = msgStr;
+    document.MM_returnValue = true;
+}
+function getQuerystring(key, default_) {
+    if (default_ == null) default_ = "";
+    key = key.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regex = new RegExp("[\\?&]" + key + "=([^&#]*)");
+    var qs = regex.exec(window.location.href);
+    if (qs == null)
+        return default_;
+    else
+        return qs[1];
+}
+
+var author_value = getQuerystring('Session');
+if (author_value == '') {
+    
+}
+else {
+    alert('Session time has expired');
+}
+
+</script>
+
+</head>
+<frameset border="0" rows="100%,*" frameborder="no" marginleft="0" margintop="0" marginright="0" marginbottom="0">
+<frame name="Content" src="Login.aspx?id=1" frameborder="1"/>
+
+</frameset>
+
+
+
+<!--<body onload ="MM_displayStatusMsg('www.getecha.com.sg!!!');return document.MM_returnValue" > -->
+<body>
+    <form id="form1" runat="server">
+
+    <div>
+    
+    </div>
+    </form>
+</body>
+</html>

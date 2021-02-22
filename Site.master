@@ -1,0 +1,404 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="Site" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<%--<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="-1" />--%>
+<asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>   
+       
+    <title>iOPAS</title>    
+    <link type="text/css" rel="Stylesheet" href="CSS/cal.css" />
+     <link href ="cal/popcalendar.css" type="text/css" rel="Stylesheet"/>      
+   <script type="text/javascript" src="JS/masterpage.js">     
+</script>
+
+   <script language="javascript" type="text/javascript">
+
+       var submitFormOkay = false;
+       function DisableButtons() {
+           var inputs = document.getElementsByTagName("INPUT");
+           var target = document.activeElement.toString();
+           
+           for (var i in inputs) {           
+               if (inputs[i].type == "submit" || inputs[i].type == "image") {
+
+                   if ((!target.match("closeCalendar")) && (!target.match("Attachment.aspx")) ) {
+                       inputs[i].disabled = true;
+                       
+                   }
+               }
+           }
+       }
+       window.onbeforeunload = DisableButtons;    
+            
+</script>
+
+<script language="JavaScript" type="text/jscript">
+
+
+    
+//    var mytime;
+//    function sectime(a,b) {
+
+//        var jsTimeout = a * 60000
+//       
+//        if (b == 2) {
+//        clearTimeout(mytime)  
+//        }                
+//        mytime = setTimeout("aa();", jsTimeout);              
+//    }
+//    function aa() {
+//        alert('Session is about to expire');
+//        window.location.href = 'Opas.html';
+//    }
+
+
+    var timer
+        function sectime(a) {
+            var SecSttime = new Date().toLocaleString();
+            var timeout = a * 60000;
+//        if (b == 2) {
+//            clearInterval(timer);
+            //        }
+            if (timer != null) {
+                clearInterval(timer);
+            }
+
+            timer = setInterval(function () {
+                timeout -= 1000;
+                window.status = "Your Session will timeout in " + time(timeout) + " minutes.";
+                if (timeout == 0) {
+                    clearInterval(timer);
+                    var now = new Date().toLocaleString();
+
+                    alert('Your session has expired. Session started at ' + SecSttime + ' , end at ' + now + '. You will be redirected to the login page.');
+                    window.location.href = 'iOpas.html';
+                }
+
+            }, 1000);
+    }
+
+   
+               
+                function two(x) {
+                    return ((x > 9) ? "" : "0") + x
+                }
+
+                function time(ms) {
+                    var t = '';
+                    var sec = Math.floor(ms / 1000);
+                    ms = ms % 1000
+
+                    var min = Math.floor(sec / 60);
+                    sec = sec % 60;
+                    t = two(sec);
+
+                    var hr = Math.floor(min / 240);
+                    min = min % 240;
+                    t = two(min) ;
+
+                   
+
+                   // t = two(min) + ":" + t;
+                    // t = two(min) + " : " + "minutes" + "  " + two(sec);
+
+                 //   t =  two(min) + " : " + "minutes" + "  " + two(sec);
+                    return t;
+                }
+
+                function closepopup(servername) {
+
+                    b = window.open(servername, '', '')
+                    b.focus();
+                    // window.open('http://adgetech/Reports', '', '')
+                }               
+             
+        
+        </script>
+       <%-- <meta http-equiv="Content-Language" content="en-us" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=7" />
+        <meta http-equiv="X-UA-Compatible" content="IE=8" />--%>
+        
+</head>
+<body onload="hidestatus()"> 
+<%--<body > --%>
+    <form id="form1" runat="server">
+    <div style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;">    
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #59DD63;">
+    <tr>
+    <%--  Previous 929px--%><%--#59DD63--%>
+ <%--   <td align="center" style=" height:70px;">
+        <asp:ImageMap ID="ImageMap1" runat="server" ImageUrl="~/Image/iOPASBanner.gif" 
+            Height="70px" Width="100%">
+        </asp:ImageMap>      
+        </td> --%>  
+   <td>
+   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #59DD63;">
+   <tr>
+        <td align="left" valign="top" style="height: 70px; width:265px;">
+        <asp:ImageMap ID="ImageMap1" runat="server" ImageUrl="~/Image/banner1.gif" 
+            Height="70px" Width="265px">
+        </asp:ImageMap>
+        </td>   
+
+       <td align="left" valign="top" style=" height: 70px;">
+        <asp:ImageMap ID="ImageMap2" runat="server" ImageUrl="~/Image/banner2.gif" 
+            Height="70px" Width="100%">
+        </asp:ImageMap>
+        </td>
+          
+        <td align="left" valign="top" style=" height: 70px;width:430px;">
+          <asp:ImageMap ID="ImageMap3" runat="server" ImageUrl="~/Image/banner3.gif" 
+            Height="70px" Width="430px">
+        </asp:ImageMap>
+        </td>
+          
+         <td align="left" valign="top" style=" height: 70px">
+          <asp:ImageMap ID="ImageMap4" runat="server" ImageUrl="~/Image/banner4.gif" 
+            Height="70px" Width="100%">
+        </asp:ImageMap>
+        </td>
+
+        <td align="right" valign="top" style=" height: 70px;width:265px;">
+          <asp:ImageMap ID="ImageMap5" runat="server" ImageUrl="~/Image/banner5.gif" 
+            Height="70px" Width="265px">
+        </asp:ImageMap>
+        </td> 
+   </tr>
+   </table> 
+   </td>
+
+    
+        </tr>        
+        <tr style="vertical-align:top;">       
+        <td align="left" 
+                style="background-color: #009933; padding-top:0px; vertical-align:top">
+        <table cellpadding="0" cellspacing="0" border="0" style="vertical-align:top;">
+        <tr>
+        <td align="left">
+        <asp:Label ID="Label1" Text="User Login : " runat="server" 
+                CssClass="label" ForeColor="White" ></asp:Label>
+        </td>
+        <td align="left">
+         <asp:Label ID="user" runat="server" ForeColor="White" 
+                Font-Bold="True" Width="200px" Font-Names="Arial" Font-Size="10pt"></asp:Label> 
+        </td>
+        <td align="left" style="padding-left:20px">
+        <asp:Label ID="lblpharloc" Text="Pharmacy Location :" runat="server" 
+                CssClass="label" Font-Names="Arial" Font-Size="10pt" ForeColor="White" ></asp:Label>
+        </td>
+        <td align="left" style="padding-left:4px">
+        <asp:TextBox ID="txtphaloc" runat="server" Width="280px" ReadOnly="True" CssClass="textbox" AutoCompleteType="Disabled" ></asp:TextBox>
+        </td>
+        <td align="left" style="padding-left:10px">        
+        <asp:HyperLink ID="home" runat="server" Text="Home" NavigateUrl="~/Home.aspx" 
+                Font-Names="Arial" Font-Size="10pt" ForeColor="White"></asp:HyperLink>
+        </td>
+        <td align="left" style="padding-left:15px">            
+        <asp:HyperLink ID="HyperLink1" runat="server" Text="Change Password" 
+                NavigateUrl="~/Changepassword.aspx" Font-Names="Arial" Font-Size="10pt" 
+                ForeColor="White"></asp:HyperLink>
+        </td>
+         <td align="left" style="padding-left:15px">
+      <asp:LinkButton ID="llk" runat="server" Text="Log Off" Font-Names="Arial" 
+                  Font-Size="10pt"  ForeColor="White" onclick="llk_Click"></asp:LinkButton>
+        </td>
+        <td>
+       <asp:Button ID="btnmanual" runat="server" CausesValidation="False" OnClick="btnmanual_Click" Style="position: static; display: none" Text="Ok" />   
+        </td>
+          <td align="left" style="padding-left:200px">
+         <asp:Label ID="lblAppserver" runat="server" ForeColor="White" 
+                Font-Bold="True" Width="50px" Font-Names="Arial" Font-Size="10pt"></asp:Label> 
+        </td>
+        </tr>
+        </table>        
+        </td>
+        </tr>
+        </table>       
+       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="height:600px;">  
+           <tr>        
+           <td valign="top" align="left"                   
+                   
+                   style="width:117px; padding-top:5px; padding-bottom:5px; background-color:#7CE484;">
+          <asp:Menu ID="menu1" runat="server" Font-Bold="False" Font-Italic="False"
+           Width="10px" onmenuitemclick="menu1_MenuItemClick" BackColor="#7CE484" DynamicHorizontalOffset="2"
+           Font-Names="Arial" Font-Size="10pt" ForeColor="Black" 
+                   StaticSubMenuIndent="10px" Height="350px" >                   
+              <DynamicMenuItemStyle HorizontalPadding="4px" VerticalPadding="1px" />
+              <StaticHoverStyle BackColor="#006600" ForeColor="White" />
+              <Items>             
+
+                  <asp:MenuItem Text="Loading" Value="Loading">
+                    <asp:MenuItem Value="Bottle Unloading" 
+                          NavigateUrl="BottleUnloading.aspx">
+                      </asp:MenuItem>
+                  <asp:MenuItem Value="Bottle Pre loading" 
+                          NavigateUrl="BottlePreLoading.aspx"></asp:MenuItem>
+
+                    <asp:MenuItem Value="Bottle First Verification" 
+                          NavigateUrl="Bottle_FirstVerification.aspx"></asp:MenuItem>
+
+                      <asp:MenuItem Value="Cartridge Unloading" 
+                          NavigateUrl="~/Cartridgeunloading.aspx">
+                      </asp:MenuItem>
+                     
+                      <asp:MenuItem Value="Cartridge Pre Loading" 
+                          NavigateUrl="~/Preloading.aspx"></asp:MenuItem>
+                    
+                      <asp:MenuItem Value="First Verification" 
+                          NavigateUrl="~/FirstVerification.aspx">
+                      </asp:MenuItem>
+                      <asp:MenuItem Value="Second Verification" 
+                          NavigateUrl="~/Secondverification.aspx">
+                      </asp:MenuItem>
+                      <asp:MenuItem 
+                          Value="Cartridge Status Enquiry" NavigateUrl="~/Preloadedenquery.aspx"></asp:MenuItem>
+                      <asp:MenuItem Value="DDS / BDS Cartridge Status" 
+                          NavigateUrl="~/Cartridgestatus.aspx" >
+                      </asp:MenuItem>
+                      <asp:MenuItem Value="BDS Cartridge Structure Status" 
+                          NavigateUrl="BDSStructureStatus.aspx" >
+                      </asp:MenuItem>
+                    </asp:MenuItem>                   
+               
+                  <asp:MenuItem Text="Label" Value="Printing">
+                  
+                      <asp:MenuItem  Value="Print Cartridge Drug Label" 
+                          NavigateUrl="~/printcartdruglabel.aspx">
+                      </asp:MenuItem>
+                    <%--  <asp:MenuItem Text="Print Cartridge Barcode Label" Value="Cartridge Barcode" 
+                          NavigateUrl="~/printcartbarcode.aspx"></asp:MenuItem>--%>
+                  </asp:MenuItem>
+                  <asp:MenuItem Text="Enquiry" Value="Enquiry">
+                      <asp:MenuItem Value="Queue Status Enquiry"                            
+                          NavigateUrl="~/QueueStatusEnquiry.aspx">
+                      </asp:MenuItem>                
+                      <asp:MenuItem 
+                          Value="Drug Inventory" NavigateUrl="~/druginventory.aspx"></asp:MenuItem>                                         
+                  </asp:MenuItem>
+                  <asp:MenuItem Text="Batch Orders" Value="Batch Orders">
+                      <asp:MenuItem  Value="Batch Order Scheduling" 
+                          NavigateUrl="~/BatchOrder.aspx"></asp:MenuItem>
+                          <asp:MenuItem  Value="Batch Order Enquiry" 
+                          NavigateUrl="~/Batchenquiry.aspx"></asp:MenuItem>
+                  </asp:MenuItem>
+                  <asp:MenuItem Text="Setting" Value="Setting">
+                  <asp:MenuItem Text="General" Value="General">
+                  <asp:MenuItem Value="Drug Master" 
+                          NavigateUrl="~/Drugmaster.aspx"></asp:MenuItem>
+
+                  <asp:MenuItem Value="UOM Mapping Master" 
+                          NavigateUrl="UomMaster.aspx"></asp:MenuItem>
+
+                      <asp:MenuItem NavigateUrl="~/Cartridgemaster.aspx" 
+                          Value="Cartridge Master"></asp:MenuItem>
+                      <asp:MenuItem Value="Loading Master" NavigateUrl="~/LoadingMasteraspx.aspx"></asp:MenuItem>            
+                     
+                     
+                      <asp:MenuItem Value="Printer Master" 
+                          NavigateUrl="~/Printer.aspx"></asp:MenuItem>
+       
+                      <asp:MenuItem 
+                          NavigateUrl="~/ReasonMaster.aspx" Value="Reason Master">
+                      </asp:MenuItem>
+                  </asp:MenuItem>
+                   <asp:MenuItem Text="System" Value="System">
+            
+                      <asp:MenuItem NavigateUrl="~/Pharmacymaster.aspx" 
+                          Value="Pharmacy Location Master"></asp:MenuItem>
+
+                      <asp:MenuItem NavigateUrl="~/DDSmaster.aspx" Value="DDS / BDS Master">
+                      </asp:MenuItem>
+
+                       <asp:MenuItem Value="Queue Series" 
+                          NavigateUrl="~/Queuetype.aspx"></asp:MenuItem>
+
+                        <asp:MenuItem  Value="Processing Master" 
+                          NavigateUrl="~/Processingmaster.aspx"></asp:MenuItem>    
+
+                      <asp:MenuItem NavigateUrl="~/RFIDmaster.aspx" 
+                           Value="RFID Master"></asp:MenuItem>
+
+                      <asp:MenuItem  Value="SMS Master" 
+                           NavigateUrl="~/SMSmaster.aspx"></asp:MenuItem>         
+                                        
+                       <asp:MenuItem NavigateUrl="~/smssetup.aspx"  Value="SMS Alert">
+                       </asp:MenuItem>
+
+                       <asp:MenuItem Value="Drug Pack Type" 
+                          NavigateUrl="~/Drugpackmaster.aspx"></asp:MenuItem>
+
+                  </asp:MenuItem>
+                  <asp:MenuItem Text="Security" Value="Security">
+                     
+                      <asp:MenuItem  Value="User Creation" 
+                          NavigateUrl="~/User.aspx">
+                      </asp:MenuItem>
+                      <asp:MenuItem  Value="Role Administration" 
+                          NavigateUrl="~/Role.aspx">
+                      </asp:MenuItem>
+                      <asp:MenuItem  Value="Security" 
+                          NavigateUrl="~/securityadmin.aspx">
+                      </asp:MenuItem>
+                      <asp:MenuItem NavigateUrl="~/Workstation.aspx" 
+                          Value="WorkStation">
+                      </asp:MenuItem>
+                      <asp:MenuItem NavigateUrl="~/Domainmaster.aspx"  Value="Domain">
+                      </asp:MenuItem>
+                  </asp:MenuItem>
+                  </asp:MenuItem>                  
+                  <asp:MenuItem Text="Monitoring" Value="DDS Monitoring">
+                     
+                      <asp:MenuItem NavigateUrl="~/Drugalertauto.aspx" 
+                          Value="User Alert"></asp:MenuItem>                    
+                  </asp:MenuItem>               
+                   
+                <%--  <asp:MenuItem Text="Log Off" Value="Log off" 
+                      Selected="True" Target="Log off">
+                  </asp:MenuItem>--%>
+                                  
+              </Items>  
+                                               
+              <StaticSelectedStyle BackColor="#FFCC66" />
+              <StaticMenuItemStyle HorizontalPadding="5px" VerticalPadding="1px" />
+              <DynamicHoverStyle BackColor="#006600" ForeColor="White" />
+             <DynamicMenuStyle BackColor="#7CE484" />
+        <DynamicSelectedStyle ForeColor="White" BackColor="#006600" />                     
+        </asp:Menu> 
+         
+<table cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td align="left" style="padding-top:10px">
+<asp:Button ID="btnreport" Text="Reports" runat="server" BorderStyle="None" onclick="btnreport_Click"  
+                   Width="59px" CssClass="button" Font-Size="10pt" 
+        UseSubmitBehavior="False" Font-Names="Arial" /> 
+</td>
+</tr>
+<%--<tr >
+<td align="left" style="padding-top:10px">
+ <asp:Button ID="btnlogoff" Text="Log Off" runat="server" BorderStyle="None"  Width="56px" 
+        CssClass="button" onclick="btnlogoff_Click" Font-Size="10pt" 
+        UseSubmitBehavior="False" /> 
+</td>
+</tr>--%>
+</table>                                   
+      </td> 
+<%--     <td valign="top" align="center" 
+      style=" padding-left: 15pt; padding-right: 3pt; padding-top: 2pt; background-color: #FBFFFF;">     --%> 
+        <td valign="top" align="center"                    
+                   style=" padding-left: 15pt; padding-right: 3pt; padding-top: 2pt; background-color: #D2FECF;">     
+                   <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"> 
+                
+
+                   </asp:ContentPlaceHolder>
+                </td> 
+                </tr> 
+               
+    </table>    
+    </div> 
+    </form>   
+    </body>
+</html>
