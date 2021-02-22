@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="BottlePreLoading.aspx.cs" Inherits="BottlePreLoading" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="BottlePreLoading.aspx.cs" Inherits="BottlePreLoading" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
@@ -10,7 +10,7 @@
   <script language="javascript" type="text/javascript">
       
       function itemsearch() {
-          window.open('BottlePreLoadingPopup.aspx', 'search', 'menubar=no,center:yes,toolbar=no,scrollbars=no,width=800,height=500[color=blue]40,top=100,left=200')
+          window.open('BottlePreLoadingPopup.aspx', 'search', 'menubar=no,center:yes,toolbar=no,scrollbars=no,width=800,height=650[color=blue]40,top=100,left=200')
           window.close();
       }    
 
@@ -29,12 +29,6 @@
       }
 
 </script>
-
-
-
-
-
-
 
   <asp:UpdatePanel ID="upddrug" runat="server">
 <ContentTemplate>
@@ -111,6 +105,12 @@
 <td align="left">
  <asp:Button ID="btnok" runat="server" CausesValidation="False" OnClick="btnok_Click" Style="position: static; display: none" Text="Ok" />           
 </td> 
+<td align="left">
+ <asp:TextBox ID="txtexpdate1" runat="server" CausesValidation="false" Style="position: static; display: none" AutoCompleteType="Disabled"/>
+</td> 
+<td align="left">
+ <asp:TextBox ID="txtbatchno1" runat="server" CausesValidation="false" Style="position: static; display: none"  AutoCompleteType="Disabled"/>  
+</td>
 </tr>
 <tr>
 <td align="left" width="100px" >

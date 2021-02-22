@@ -20,7 +20,11 @@
     font-weight:lighter; 
 }
 
-
+.tdalign {
+    text-align: center;
+    vertical-align: middle;
+   
+}
 
 .labelallbigfont
 {
@@ -35,12 +39,11 @@
       background-color:#FFCC66;
     
 }
-    .textbox
-    {        
-      font-family:Arial;
-      font-size :12px;
-      text-align :left;
-      font-weight:lighter;
+.textbox {
+    font-family: Arial;
+    font-size: 12px;
+    text-align: left;
+    font-weight: lighter;
     
 }
 
@@ -108,12 +111,5 @@
  {
      width:125px; 
      height:25px;
-     } 
-     
-     
+     }
 
-
-  
-    
-    
-   

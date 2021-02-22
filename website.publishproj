@@ -18,7 +18,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1011f2f6-475b-499c-b9f8-6bf0d88a3042}</ProjectGuid>
     <SourceWebPhysicalPath>$(MSBuildThisFileDirectory)</SourceWebPhysicalPath>
-    <SourceWebVirtualPath>/iOPAS Ver 1.0.0.28 (5-Jan-2021)</SourceWebVirtualPath>
+    <SourceWebVirtualPath>/iOPAS_KKH</SourceWebVirtualPath>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SourceWebProject>
     </SourceWebProject>

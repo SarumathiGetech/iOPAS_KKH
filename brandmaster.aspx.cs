@@ -14,9 +14,20 @@ public partial class brandmaster : System.Web.UI.Page
     DB_Connection DBCon = new DB_Connection();
     SqlCommand cmd = new SqlCommand();
     Drug drg = new Drug();
-    string sessionuserid="", mfrbarcode="", activestatus = "";   
+    GS1BarcodeFunction gs1barcode = new GS1BarcodeFunction();
+    string sessionuserid="", mfrbarcode="", activestatus = "";
     //public static string gridbrandid = "";    
-    int defaultval = 0;    
+    // GS1 Barcode Declaration
+    string SymbolIdentifier = "";
+    string GTIN = "";
+    string Format = "";
+    string ExpDate = "", BatchNumber = "", SerialNumber = "", ManufacturedDate = "";
+    string mfrBarcode = "";
+    int rtnValue = 0; int defaultval = 0;
+    bool haveGS1Barcode = false;
+
+
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Session["Userid"] != null)
@@ -34,6 +45,9 @@ public partial class brandmaster : System.Web.UI.Page
                 btnbrandupd.Visible = false;
                 btnsave.Visible = true;
                 btnupdate.Visible = false;
+                txtmfrcode.Attributes.Add("onKeyPress", "doClick(event)");
+                txtbrandname.Attributes.Add("onKeyPress", "doClick(event)");
+                txtbrandcode.Attributes.Add("onKeyPress", "doClick(event)");
             }
         }
         else
@@ -44,47 +58,127 @@ public partial class brandmaster : System.Web.UI.Page
     //protected void btnadd_Click(object sender, EventArgs e)
     protected void btnadd_Click(object sender, ImageClickEventArgs e)
     {
-       int d = 0;      
-        if (txtmfrcode.Text.Trim() != "")
+        int d = 0;
+        if (checkGS1Barcode(txtmfrcode.Text))
         {
-            mfrcodecheck();
-            if (mfrbarcode != txtmfrcode.Text)
-            {
-                foreach (ListItem itemins in lstbox.Items)
-                {                    
-                 if (itemins != null)
+            int returnValue = gs1barcode.GS1CodeCheck(txtmfrcode.Text.Trim(), ref ExpDate, ref BatchNumber, ref SerialNumber, ref ManufacturedDate);
+            if(returnValue == 0) 
+            { 
+                txtmfrcode.Text = SerialNumber.ToString();
+                if (txtmfrcode.Text.Trim() != "")
+                {
+                    mfrcodecheck();
+                    if (mfrbarcode != txtmfrcode.Text.Trim())
                     {
-                        d = 1;
-                        if (itemins.ToString() == txtmfrcode.Text.Trim())
+                        foreach (ListItem itemins in lstbox.Items)
                         {
-                         d = 2;
-                         txtmfrcode.Text = "";
-                         txtmfrcode.Focus();
-                         return;
+                            if (itemins != null)
+                            {
+                                d = 1;
+                                if (itemins.ToString() == txtmfrcode.Text.Trim())
+                                {
+                                    d = 2;
+                                    txtmfrcode.Text = "";
+                                    txtmfrcode.Focus();
+                                    return;
+                                }
+                            }
                         }
-                     }                   
+                        if (d == 1)
+                        {
+                            lstbox.Items.Add(txtmfrcode.Text.Trim());
+                            txtmfrcode.Text = "";
+                            txtmfrcode.Focus();
+                        }
+                        else if (d == 0)
+                        {
+                            lstbox.Items.Add(txtmfrcode.Text.Trim());
+                            txtmfrcode.Text = "";
+                            txtmfrcode.Focus();
+                        }
+                    }
+                    else if (mfrbarcode == txtmfrcode.Text.Trim())
+                    {
+                        txtmfrcode.Text = "";
+                        ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('MFR Barcode already exist');</script>", false);
+                        txtmfrcode.Focus();
+                    }
+
                 }
-                if (d == 1 )
-                {
-                    lstbox.Items.Add(txtmfrcode.Text.Trim());
-                    txtmfrcode.Text = "";
-                    txtmfrcode.Focus();
-                }
-                else if (d == 0)
-                {
-                    lstbox.Items.Add(txtmfrcode.Text.Trim());
-                    txtmfrcode.Text = "";
-                    txtmfrcode.Focus();
-                }               
             }
-            else if (mfrbarcode == txtmfrcode.Text.Trim())
+            else{
+                ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('Not a GS1 Barcode');</script>", false);
+            }
+        }
+        else if(!checkGS1Barcode(txtmfrcode.Text.Trim()))
+        {
+            if (txtmfrcode.Text.Trim() != "")
             {
-                txtmfrcode.Text = "";
-                ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('MFR Barcode already exist');</script>", false);
-                txtmfrcode.Focus();
+                mfrcodecheck();
+                if (mfrbarcode != txtmfrcode.Text.Trim())
+                {
+                    foreach (ListItem itemins in lstbox.Items)
+                    {
+                        if (itemins != null)
+                        {
+                            d = 1;
+                            if (itemins.ToString() == txtmfrcode.Text.Trim())
+                            {
+                                d = 2;
+                                txtmfrcode.Text = "";
+                                txtmfrcode.Focus();
+                                return;
+                            }
+                        }
+                    }
+                    if (d == 1)
+                    {
+                        lstbox.Items.Add(txtmfrcode.Text.Trim());
+                        txtmfrcode.Text = "";
+                        txtmfrcode.Focus();
+                    }
+                    else if (d == 0)
+                    {
+                        lstbox.Items.Add(txtmfrcode.Text.Trim());
+                        txtmfrcode.Text = "";
+                        txtmfrcode.Focus();
+                    }
+                }
+                else if (mfrbarcode == txtmfrcode.Text.Trim())
+                {
+                    txtmfrcode.Text = "";
+                    ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('MFR Barcode already exist');</script>", false);
+                    txtmfrcode.Focus();
+                }
+
             }
-        }      
+        }
+        else { }
+            
     }
+
+
+    public Boolean checkGS1Barcode(string GS1Barcode)
+    {
+        bool SI = false;
+        int barcodelength = GS1Barcode.Length;
+        if ((GS1Barcode != "") && (barcodelength >3))
+        {
+            SymbolIdentifier = GS1Barcode.Substring(0, 3);
+            if ((SymbolIdentifier == "]E0") || (SymbolIdentifier == "]E1") || (SymbolIdentifier == "]E2") || (SymbolIdentifier == "]E3") || (SymbolIdentifier == "]E4") ||
+                          (SymbolIdentifier == "]I1") || (SymbolIdentifier == "]C1") || (SymbolIdentifier == "]e0") || (SymbolIdentifier == "]e1") || (SymbolIdentifier == "]e2") ||
+                          (SymbolIdentifier == "]d1") || (SymbolIdentifier == "]d2") || (SymbolIdentifier == "]Q3"))
+            {
+                return SI = true;
+            }
+        }
+        else
+        {
+
+        }
+        return SI;
+    }
+
     //protected void Button2_Click(object sender, EventArgs e)
     protected void Button2_Click(object sender, ImageClickEventArgs e)
     {
@@ -127,7 +221,7 @@ public partial class brandmaster : System.Web.UI.Page
 
     public void condictioncheck()
     {
-        if (chkdefault.Checked == true)
+        if (r.Checked == true)
         {
             defaultval = 1;
         }
@@ -356,7 +450,7 @@ public partial class brandmaster : System.Web.UI.Page
     // * Default Brand Reader Function Grid Selection *\\
     public void defaultbrandreader()
     {
-        chkdefault.Checked = false;
+        r.Checked = false;
         using (SqlConnection con = DBCon.getstring())
         {
             string Commt = "select ba.defaultbrand from Brand_Allot as ba left join  Brand_Master as b on b.BrandID=ba.BrandID left join Item_Master as i on i.MasterID=ba.Masterid where ba.BrandID='" + Convert.ToInt32(ViewState["gridbrandid"]) + "' and i.Item_Code='" + txtitemcode.Text.Trim() + "'";
@@ -371,11 +465,11 @@ public partial class brandmaster : System.Web.UI.Page
                     {
                         if (dr[0].ToString() == "1")
                         {
-                            chkdefault.Checked = true;
+                            r.Checked = true;
                         }
                         else
                         {
-                            chkdefault.Checked = false;
+                            r.Checked = false;
                         }
                     }
                 }
@@ -451,7 +545,7 @@ public partial class brandmaster : System.Web.UI.Page
         txtmfrcode.Text = "";
         lstbox.Items.Clear();
         chkactve.Checked = false;
-        chkdefault.Checked = false;
+        r.Checked = false;
         gridsearchitemcode();
         gridbrand.Visible = true;
         brandgrid.Visible = false;
@@ -470,7 +564,7 @@ public partial class brandmaster : System.Web.UI.Page
         txtmfrcode.Enabled = true;
         lstbox.Enabled = true;
         chkactve.Enabled = true;
-        chkdefault.Enabled = true;
+        r.Enabled = true;
         btnadd.Visible = true;
         Button2.Visible = true;
     }
@@ -490,13 +584,13 @@ public partial class brandmaster : System.Web.UI.Page
         txtmfrcode.Text = "";
         lstbox.Items.Clear();
         chkactve.Checked = false;
-        chkdefault.Checked = false;
+        r.Checked = false;
 
 
         txtmfrcode.Enabled = false;
         lstbox.Enabled = false;
         chkactve.Enabled = false;
-        chkdefault.Enabled = false;
+        r.Enabled = false;
         btnadd.Visible = false;
         Button2.Visible = false;
     }
@@ -519,7 +613,7 @@ public partial class brandmaster : System.Web.UI.Page
            txtmfrcode.Text = "";
            lstbox.Items.Clear();
            chkactve.Checked = false;
-           chkdefault.Checked = false;
+           r.Checked = false;
            btnsave.Visible = true;
            btnupdate.Visible = false;
         }
@@ -542,7 +636,7 @@ public partial class brandmaster : System.Web.UI.Page
             txtmfrcode.Enabled = true;
             lstbox.Enabled = true;
             chkactve.Enabled = true;
-            chkdefault.Enabled = true;
+            r.Enabled = true;
             btnadd.Visible = true;
             Button2.Visible = true;
             txtbrandcode.Text = "";

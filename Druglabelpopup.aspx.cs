@@ -13,8 +13,19 @@ public partial class Druglabelpopup : System.Web.UI.Page
     DB_Connection DBCon = new DB_Connection();
     SqlCommand cmd = new SqlCommand();
     Searchquery searchqry = new Searchquery();
- 
-    string location = "";
+    GS1BarcodeFunction gs1barcode = new GS1BarcodeFunction();
+
+    string location = "", drugmfrbarcode="";
+
+    // GS1 Barcode Declaration
+    string SymbolIdentifier = "";
+    string GTIN = "";
+    string Format = "";
+    string ExpDate = "", BatchNumber = "", SerialNumber = "", ManufacturedDate = "";
+    string mfrBarcode = "";
+    string preloadmfrbarcode = "";
+    int rtnValue = 0;
+    bool haveMFRCODE = false;
     protected void Page_Load(object sender, EventArgs e)
     {
        if (Session["Userid"] == null)
@@ -238,8 +249,16 @@ public partial class Druglabelpopup : System.Web.UI.Page
     // * MFR Code Exact Search * \\
     public void MFRCODE()
     {
-        searchqry.mfrcode(Druglabelgrid, txtmfrcode.Text.Trim(), location);
 
+        if (GS1BarcodeExtractMFRCode())
+        {
+            searchqry.mfrcode(Druglabelgrid, drugmfrbarcode, location);
+        }
+        else
+        {
+            searchqry.mfrcode(Druglabelgrid, txtmfrcode.Text.Trim(), location);
+        }
+       // searchqry.mfrcode(Druglabelgrid, txtmfrcode.Text.Trim(), location);
         DataSet dsData = Druglabelgrid.DataSource as DataSet;
         DataTable dtData = dsData.Tables[0];
 
@@ -248,6 +267,52 @@ public partial class Druglabelpopup : System.Web.UI.Page
             MFRCodeCheck(txtmfrcode.Text.Trim());
         }
     }
+
+    public Boolean GS1BarcodeExtractMFRCode()
+    {
+        int barcodeLength = txtmfrcode.Text.Length;
+        if (barcodeLength > 0)
+        {
+            if ((txtmfrcode.Text.Trim() != "") && (checkGS1Barcode(txtmfrcode.Text.Trim())))
+            {
+
+                int returnValue = gs1barcode.GS1CodeCheck(txtmfrcode.Text.Trim(), ref ExpDate, ref BatchNumber, ref SerialNumber, ref ManufacturedDate);
+                if (returnValue == 0)
+                {
+                    drugmfrbarcode = SerialNumber.Trim();
+                    return true;
+                }
+                else
+                {
+                    ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('MFR Barcode Mismatch with a GS1 Serial Number');</script>", false);
+                }
+
+            }
+        }
+        return false;
+    }
+
+    public Boolean checkGS1Barcode(string GS1Barcode)
+    {
+        bool SI = false;
+        int barcodelength = GS1Barcode.Length;
+        if ((GS1Barcode != "") && (barcodelength > 3))
+        {
+            SymbolIdentifier = GS1Barcode.Substring(0, 3);
+            if ((SymbolIdentifier == "]E0") || (SymbolIdentifier == "]E1") || (SymbolIdentifier == "]E2") || (SymbolIdentifier == "]E3") || (SymbolIdentifier == "]E4") ||
+                         (SymbolIdentifier == "]I1") || (SymbolIdentifier == "]C1") || (SymbolIdentifier == "]e0") || (SymbolIdentifier == "]e1") || (SymbolIdentifier == "]e2") ||
+                         (SymbolIdentifier == "]d1") || (SymbolIdentifier == "]d2") || (SymbolIdentifier == "]Q3"))
+            {
+                return SI = true;
+            }
+        }
+        else
+        {
+
+        }
+        return SI;
+    }
+
     //protected void btnsearch_Click(object sender, EventArgs e)
     protected void btnsearch_Click(object sender, ImageClickEventArgs e)
     {
@@ -354,14 +419,13 @@ public partial class Druglabelpopup : System.Web.UI.Page
         }
         else if (txtmfrcode.Text != "" && txtbrand.Text.Trim() == "" && txtitemname.Text.Trim() == "" && txtdrugcode.Text.Trim() == "" && txtitemcode.Text.Trim() == "")
         {
-            MFRCODE();
+         MFRCODE();
         }
         else
         {
             searchqry.preloadpoppupitemcode(Druglabelgrid, "", location);
         }
     }
-
     //protected void btnclear_Click(object sender, EventArgs e)
     protected void btnclear_Click(object sender, ImageClickEventArgs e)
     {

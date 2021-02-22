@@ -66,6 +66,11 @@ Queue Status Enquiry diverted order grid display bug fixed .
 Ver 1.0.0.27 14-Mar-2017 
 Preloaded cartridge BDS carton box force cancel checkbox added .Text box removed
 
-Ver 1.0.0.28 23-Nov_2020
+Ver 1.0.0.28 23-Nov-2020
 <add key="HasDNS" value="Yes" /> added in Webconfig
 Based on DNS check - YES/NO, Need to display the Pharmacy Location in the iOPAS Application Home Page Text Box.
+
+Ver 1.0.0.29 3-Dec-2020
+<httpRuntime requestValidationMode="2.0" /> in Webconfig
+GS1 Label Barcode Enhancement - Based on MFR barcode/GS1 barcode ,it will autopopulate the ExpiryDate and Batch Number 
+ or manually need to enter the ExpiryDate and Batch Number

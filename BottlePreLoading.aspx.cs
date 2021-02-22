@@ -105,8 +105,10 @@ public partial class BottlePreLoading : System.Web.UI.Page
                        txtmaxcartqty.Text = dr[7].ToString();
                        txtcartonbox.Text = txtcarttype.Text.Trim();
                        TxtBoxOrPallet.Text = txt_Box_Or_Pallet.Text.Trim();
-                       //txtcartonbox.Text = dr[8].ToString();
-                   }
+                        //txtcartonbox.Text = dr[8].ToString();
+                        txtexpdate.Text = txtexpdate1.Text.Trim();
+                        txtbatchno.Text = txtbatchno1.Text.Trim();
+                    }
 
                }
            }
@@ -339,6 +341,8 @@ public partial class BottlePreLoading : System.Web.UI.Page
        BtnSearch.Visible = true;
        tdone.Visible = true;
        tdtwo.Visible = false;
+       txtexpdate1.Text = "";
+       txtbatchno1.Text = "";
        defaultprinter();
    }
 

@@ -46,7 +46,7 @@ public partial class Preloading : System.Web.UI.Page
                    txtcartno.Focus();
                    txtexpdate.Attributes.Add("onKeyPress", "doClick(event)");
                    txtbatchno.Attributes.Add("onKeyPress", "doClick(event)");
-                   
+                 
                    tdone.Visible = true;
                    tdtwo.Visible = true;
                    tdthree.Visible = true;
@@ -122,7 +122,7 @@ public partial class Preloading : System.Web.UI.Page
         txtqty.Text = "";
         txtexpdate.Text = "";
         txtbatchno.Text = "";
-
+       
         using (SqlConnection con = DBCon.getstring())
         {
             string Commt = "select u.Item_Code,u.Drug_Code,u.Item_Name,b.brandname,pm.PackType,um.Pack_Size,l.UOM,um.Max_Cartridge_Qty from Item_user_Master as um left join Item_Master as u on u.MasterID=um.MasterID left join Item_Location as l on l.MasterID=u.MasterID left join Brand_Master as b on b.BrandID=um.Brandid left join Packtype_Master as pm on pm.ID=UM.PacktypeID where um.ID='" + Convert.ToInt32(searchvalue.Text.Trim()) + "'";
@@ -143,6 +143,10 @@ public partial class Preloading : System.Web.UI.Page
                         txtpacksize.Text = dr[5].ToString();
                         txtuom.Text = dr[6].ToString();
                         txtmaxcartqty.Text = dr[7].ToString();
+                        txtexpdate.Text = txtexpdate1.Text.Trim();
+                        txtbatchno.Text = txtbatchno1.Text.Trim();
+
+
                     }
                 }
             }
@@ -332,6 +336,10 @@ public partial class Preloading : System.Web.UI.Page
         btnsave.Visible = true;       
         txtcartno.ReadOnly = false;
         txtcartno.Focus();
+        txtbatchno1.Text = "";
+        txtexpdate1.Text = "";
+
+
         //preloadgrid();
     }
     

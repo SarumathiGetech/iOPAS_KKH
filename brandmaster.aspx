@@ -12,11 +12,25 @@
             window.open('brandmaster.aspx', 'search', 'menubar=no,center:yes,scrollbars=no,width=720,height=500[color=blue]40,top=100,left=200')
             window.close();
         }
-          function closer() {
-              //alert("This window is about to close.");
-              window.opener.document.getElementById('ctl00_ContentPlaceHolder1_btnok').click();
-        }       
-</script>
+        function closer() {
+            //alert("This window is about to close.");
+            window.opener.document.getElementById('ctl00_ContentPlaceHolder1_btnok').click();
+        }
+
+        function doClick(e) {
+            var key;
+
+            if (window.event)
+                key = window.event.keyCode;     //IE
+            else
+                key = e.which;     //firefox
+
+            if (key == 13) {
+                document.getElementById('<%=btnadd.ClientID%>').click();
+                event.keyCode = 0
+            }
+        }  
+    </script>
 </head>
 <body onbeforeunload="closer()" style="background-color:#D2FECF">
     <form id="form1" runat="server" style="background-color:#D2FECF">
@@ -71,83 +85,73 @@
              AutoCompleteType="Disabled"></asp:TextBox>
      </td> 
      </tr>
-     <tr>     
-        <td align="left">
-     <asp:Label ID="Label3" runat="server" Text="MFR Barcode" CssClass= "labelall"></asp:Label>
-            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
-                ControlToValidate="txtmfrcode" ErrorMessage="*" SetFocusOnError="True" 
-                ValidationGroup="mfr"></asp:RequiredFieldValidator>
-     </td>
-     <td>     
-      <asp:TextBox ID="txtmfrcode" runat="server" Width="150px" CssClass="textbox" AutoCompleteType="Disabled"></asp:TextBox>
-     </td>  
-     <td>
-    <%-- <asp:Button ID="btnadd" runat="server" Text="Add" onclick="btnadd_Click" CssClass="btn" 
-              Width="60px" ValidationGroup="mfr" />--%>
-  <asp:ImageButton ID="btnadd" runat="server" CssClass="btn" ValidationGroup="mfr"
-            ImageUrl="~/ButtonImages/MFRAdd.png" onclick="btnadd_Click" 
-             Height="20px"  />
-     </td> 
-     <td>
-     <table cellpadding="0" cellspacing="0" border="0">
-     <tr>
-     <td align="left">
-     <asp:CheckBox ID="chkdefault" runat="server" Text="Default Brand" 
-             TextAlign="Left" CssClass="labelall" />
-     </td>
-     <td align="left" style="padding-left:20px">
-      <asp:CheckBox ID="chkactve" runat="server" Text="Active" 
-             TextAlign="Left" CssClass="labelall" />
-     </td>
-     <td align="left" style="padding-left:25px">
-  <asp:ImageButton ID="btnclear" runat="server" CssClass="btn" 
-            ImageUrl="~/ButtonImages/Clear.png" onclick="btnclear_Click" Height="20px"/>
-     </td>
-     <td align="left">
-
-  <asp:ImageButton ID="btnsearch" runat="server" CssClass="btn" 
-            ImageUrl="~/ButtonImages/BrandMaster.png" onclick="btnsearch_Click" 
-             Height="20px"/>
+      </table>
      </td>
      </tr>
-     </table>                  
-     </td>     
-     </tr> 
-     <tr>
-     <td>
-          
-     </td>               
-     <td>
-     <asp:ListBox ID="lstbox" runat="server" Width="154px" CssClass="textbox"></asp:ListBox>
-      </td>     
-     <td>
-   <%--  <asp:Button ID="Button2" runat="server" Text="Remove" Width="60px" CssClass="btn" 
-             onclick="Button2_Click" UseSubmitBehavior="False" />--%>
-               <asp:ImageButton ID="Button2" runat="server" CssClass="btn" 
-            ImageUrl="~/ButtonImages/MFRRemove.png" onclick="Button2_Click" 
-             Height="20px" />
-             <br />
-   <%--  <asp:Button ID="btnsave" runat="server" Text="Save" Width="60px" CssClass="btn" 
-             onclick="btnsave_Click" ValidationGroup="brand" UseSubmitBehavior="False"/> --%>
-                <asp:ImageButton ID="btnsave" runat="server" CssClass="btn" ValidationGroup="brand"
+         <tr>
+             <td>
+                <table width="60%" cellpadding="0" cellspacing="0" border="0" style="margin-left:32.5%">
+                     <tr>
+                     <td>
+                     <asp:CheckBox ID="r" runat="server" Text="Default Brand" 
+                             TextAlign="Left" CssClass="labelall" />
+                     </td>
+                     <td>
+                      <asp:CheckBox ID="chkactve" runat="server" Text="Active" 
+                             TextAlign="Left" CssClass="labelall" />
+                     </td>
+                     <td align="center">
+                  <asp:ImageButton ID="btnclear" runat="server" CssClass="btn" style="padding-top:5px"
+                            ImageUrl="~/ButtonImages/Clear.png" onclick="btnclear_Click" Height="20px"/>
+                     </td>
+                     <td>
+                  <asp:ImageButton ID="btnsearch" runat="server" CssClass="btn"  style="padding-top:5px"
+                            ImageUrl="~/ButtonImages/BrandMaster.png" onclick="btnsearch_Click" 
+                             Height="21px"/>
+                     </td>
+                     </tr>
+                     </table>  
+
+             </td>
+         </tr>
+
+         <tr>
+             <td>
+                 <table width="100%" border="0" cellpadding="0" cellspacing="0">
+             <tr>
+                 <td>
+                     <asp:Label ID="Label3" runat="server" CssClass="labelall" Text="MFR Barcode"></asp:Label>
+                     <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtmfrcode" ErrorMessage="*" 
+                         SetFocusOnError="True" ValidationGroup="mfr"></asp:RequiredFieldValidator>
+                 </td>
+                 <td>
+                     <asp:TextBox ID="txtmfrcode" runat="server" AutoCompleteType="Disabled" 
+                         CssClass="textbox" Width="580px"></asp:TextBox>
+                 </td>
+                 <td>
+                     <asp:ImageButton ID="btnadd" runat="server" CssClass="btn" style="padding-right:10px"
+                         Height="22px" ImageUrl="~/ButtonImages/MFRAdd.png" onclick="btnadd_Click" ValidationGroup="mfr" />
+                 </td>
+             </tr>
+                     <tr>
+                         <td></td>
+                         <td><asp:ListBox ID="lstbox" runat="server" Width="583px" CssClass="textbox"></asp:ListBox></td>
+                         <td>
+                           <asp:ImageButton ID="Button2" runat="server" CssClass="btn" style="padding-right:10px"
+                        ImageUrl="~/ButtonImages/MFRRemove.png" onclick="Button2_Click" 
+                         Height="20px" />
+                         <br />
+            <asp:ImageButton ID="btnsave" runat="server" CssClass="btn" ValidationGroup="brand" style="padding-right:10px"
             ImageUrl="~/ButtonImages/Save.png" onclick="btnsave_Click" Height="20px" />
 
-             <asp:ImageButton ID="btnupdate" runat="server" CssClass="btn" ValidationGroup="brand"
+             <asp:ImageButton ID="btnupdate" runat="server" CssClass="btn" ValidationGroup="brand" style="padding-right:10px"
             ImageUrl="~/ButtonImages/Update.png" Height="20px"  onclick="btnupdate_Click" />
-<%--
-             <asp:Button ID="btnbrandupd" runat="server" Text="Save" Width="60px" CssClass="btn" 
-             ValidationGroup="brand" UseSubmitBehavior="False" 
-             onclick="btnbrandupd_Click" BackColor="#169116" BorderStyle="None" 
-             ForeColor="White"/> --%>
-
-                    <asp:ImageButton ID="btnbrandupd" runat="server" CssClass="btn" ValidationGroup="brand"
-            ImageUrl="~/ButtonImages/Save.png" Height="20px"  onclick="btnbrandupd_Click" />
-          
-     </td>
-     </tr>    
-     </table>
-     </td>
-     </tr>
+            <asp:ImageButton ID="btnbrandupd" runat="server" CssClass="btn" ValidationGroup="brand" style="padding-right:10px"
+            ImageUrl="~/ButtonImages/Save.png" Height="20px"  onclick="btnbrandupd_Click" /></td>
+                     </tr>
+         </table>
+             </td>
+         </tr>
      <tr>
      <td align="left">     
      <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -202,7 +206,7 @@
      </table>
      </td>
      </tr>
-          <tr>
+     <tr>
      <td align="left">     
      <table width="100%" cellpadding="0" cellspacing="0" border="0">
      <tr>

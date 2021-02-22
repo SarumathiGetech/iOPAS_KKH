@@ -119,7 +119,7 @@ function doClick1() {
      <table align="right" style="vertical-align:top"  cellpadding="0" cellspacing="0" border="0">
      <tr>
        <td  style="vertical-align:top; padding-right:5px" >  
-     <asp:Label ID="lblversion" runat="server" Text="1.0.0.28" CssClass="labelall"></asp:Label>     
+     <asp:Label ID="lblversion" runat="server" Text="1.0.0.29" CssClass="labelall"></asp:Label>     
      </td>
      </tr>
      <tr>

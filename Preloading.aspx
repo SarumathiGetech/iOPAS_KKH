@@ -5,28 +5,26 @@
     <script language="javascript" type="text/javascript" src="cal/popcalendar.js"></script>  
     <script language="javascript" type="text/javascript">
 
-        function Preloadcartridge()
-         {
-            window.open('Preloadpopup.aspx', 'search', 'menubar=no,center:yes,toolbar=no,scrollbars=no,width=700,height=500[color=blue]40,top=100,left=200');
+        function Preloadcartridge() {
+            window.open('Preloadpopup.aspx', 'search', 'menubar=no,center:yes,toolbar=no,scrollbars=no,width=800,height=500[color=blue]40,top=100,left=200');
             window.close();
-         } 
-     
-        function preload()
-         {
+        }
+
+        function preload() {
             window.open('popuppreload.aspx', 'search', 'menubar=no,center:yes,toolbar=no,scrollbars=no,width=750,height=500[color=blue]40,top=100,left=200');
             window.close();
-         }
+        }
 
-       function doClick(e) {
-           var key;
+        function doClick(e) {
+            var key;
 
-           if (window.event)
-               key = window.event.keyCode;     //IE
-           else
-               key = e.which;     //firefox
+            if (window.event)
+                key = window.event.keyCode;     //IE
+            else
+                key = e.which;     //firefox
 
-           if (key == 13) {
-               document.getElementById('<%=btnsave.ClientID%>').click();
+            if (key == 13) {
+                document.getElementById('<%=btnsave.ClientID%>').click();
                event.keyCode = 0
            }
        }
@@ -42,11 +40,11 @@
 
            if ((key == 13) || (key == 9)) {
                document.getElementById('<%=Btngo.ClientID%>').click();
-               event.keyCode = 0
-           }
-       }
+                event.keyCode = 0
+            }
+        }
 
-</script>
+    </script>
 
 <asp:UpdatePanel ID="upddrug" runat="server">
 <ContentTemplate>
@@ -103,6 +101,12 @@
 </td> 
 <td align="left">
  <asp:TextBox ID="txtitcodesearch" runat="server" CausesValidation="false" Style="position: static; display: none"/>  
+</td>
+ <td align="left">
+ <asp:TextBox ID="txtexpdate1" runat="server" CausesValidation="false" Style="position: static; display: none" AutoCompleteType="Disabled"/>
+</td> 
+<td align="left">
+ <asp:TextBox ID="txtbatchno1" runat="server" CausesValidation="false" Style="position: static; display: none"  AutoCompleteType="Disabled"/>  
 </td>
 </td>
 </tr>

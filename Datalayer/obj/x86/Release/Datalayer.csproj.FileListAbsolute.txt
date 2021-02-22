@@ -8,8 +8,3 @@ E:\iOPAS\KKH\iOPAS\Datalayer\bin\Release\Datalayer.pdb
 E:\iOPAS\KKH\iOPAS\Datalayer\obj\x86\Release\Datalayer.csproj.CoreCompileInputs.cache
 E:\iOPAS\KKH\iOPAS\Datalayer\obj\x86\Release\Datalayer.dll
 E:\iOPAS\KKH\iOPAS\Datalayer\obj\x86\Release\Datalayer.pdb
-E:\Source\iOPAS Ver 1.0.0.28 (5-Jan-2021)\iOPAS Ver 1.0.0.28 (5-Jan-2021)\Datalayer\bin\Release\Datalayer.dll
-E:\Source\iOPAS Ver 1.0.0.28 (5-Jan-2021)\iOPAS Ver 1.0.0.28 (5-Jan-2021)\Datalayer\bin\Release\Datalayer.pdb
-E:\Source\iOPAS Ver 1.0.0.28 (5-Jan-2021)\iOPAS Ver 1.0.0.28 (5-Jan-2021)\Datalayer\obj\x86\Release\Datalayer.csproj.CoreCompileInputs.cache
-E:\Source\iOPAS Ver 1.0.0.28 (5-Jan-2021)\iOPAS Ver 1.0.0.28 (5-Jan-2021)\Datalayer\obj\x86\Release\Datalayer.dll
-E:\Source\iOPAS Ver 1.0.0.28 (5-Jan-2021)\iOPAS Ver 1.0.0.28 (5-Jan-2021)\Datalayer\obj\x86\Release\Datalayer.pdb

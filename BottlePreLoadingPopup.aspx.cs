@@ -8,6 +8,8 @@ using System.Drawing;
 using System.Data;
 using Datalayer;
 using System.Data.SqlClient;
+using System.Globalization;
+using System.IO;
 
 public partial class BottlePreLoadingPopup : System.Web.UI.Page
 {
@@ -15,7 +17,18 @@ public partial class BottlePreLoadingPopup : System.Web.UI.Page
     SqlCommand cmd = new SqlCommand();
     BDSBottle BDSsearchqry = new BDSBottle();
     Searchquery searchqry = new Searchquery();
+    GS1BarcodeFunction gs1barcode = new GS1BarcodeFunction();
     string location = "";
+
+    // GS1 Barcode Declaration
+    string SymbolIdentifier = "";
+    string GTIN = "";
+    string Format = "";
+    string ExpDate = "", BatchNumber = "", SerialNumber = "", ManufacturedDate = "";
+    string mfrBarcode = "";
+    int rtnValue = 0;
+    bool haveMFRCODE = false;
+    string bottlepreloadmfrbarcode = "";
     protected void Page_Load(object sender, EventArgs e)
     {
         Response.Cookies.Clear();
@@ -30,6 +43,7 @@ public partial class BottlePreLoadingPopup : System.Web.UI.Page
             {   
                 //txtbarcode.Focus();
                 threetd.Visible = false;
+                //gs1Table.Visible = false;
                 Fsttd.Visible = true;
                 secondtd.Visible = true;
 
@@ -39,7 +53,8 @@ public partial class BottlePreLoadingPopup : System.Web.UI.Page
                 txtitemname.Attributes.Add("onKeyPress", "doClick2(event)");
                 txtbrand.Attributes.Add("onKeyPress", "doClick2(event)");
                 txtmfrcode.Attributes.Add("onKeyPress", "doClick2(event)");
-               // txtbarcode.Attributes.Add("onKeyPress", "doClick2(event)");   
+                //txtgs1barcode.Attributes.Add("onKeyPress", "doClick3(event)");
+               // btngs1barcodecancel.Attributes.Add("onKeyPress", "doClick4(event)");
             }
         }
     }
@@ -104,7 +119,8 @@ public partial class BottlePreLoadingPopup : System.Web.UI.Page
     public void Searchquery()
     {
         if (txtitemcode.Text.Trim() != "")
-        {// * Search itemcode Exact search *\\
+        {
+            // * Search itemcode Exact search *\\
             BDSsearchqry.BDSpreloadpoppupitemcode(preloadpopgrid, txtitemcode.Text.Trim(), location);
         }
         //else if (txtbarcode.Text.Trim() != "")
@@ -129,7 +145,15 @@ public partial class BottlePreLoadingPopup : System.Web.UI.Page
         else if (txtmfrcode.Text != "" && txtbrand.Text.Trim() == "" && txtitemname.Text.Trim() == "" && txtdrugcode.Text.Trim() == "" && txtitemcode.Text.Trim() == "")
         {
             // * MFR Code Exact Search * \\
-            BDSsearchqry.BDSmfrcode(preloadpopgrid, txtmfrcode.Text.Trim(), location);
+            if (GS1BarcodeExtractMFRCode())
+            {
+                BDSsearchqry.BDSmfrcode(preloadpopgrid, bottlepreloadmfrbarcode, location);
+            }
+            else
+            {
+                BDSsearchqry.BDSmfrcode(preloadpopgrid, txtmfrcode.Text.Trim(), location);
+            }
+           
         }
         else
         {
@@ -137,6 +161,31 @@ public partial class BottlePreLoadingPopup : System.Web.UI.Page
         }
 
     }
+
+    public Boolean GS1BarcodeExtractMFRCode()
+    {
+        int barcodeLength = txtmfrcode.Text.Length;
+        if (barcodeLength > 0)
+        {
+            if ((txtmfrcode.Text.Trim() != "") && (checkGS1Barcode(txtmfrcode.Text.Trim())))
+            {
+
+                int returnValue = gs1barcode.GS1CodeCheck(txtmfrcode.Text.Trim(), ref ExpDate, ref BatchNumber, ref SerialNumber, ref ManufacturedDate);
+                if (returnValue == 0)
+                {
+                    bottlepreloadmfrbarcode = SerialNumber.Trim();
+                    return true;
+                }
+                else
+                {
+                    ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('MFR Barcode Mismatch with a GS1 Serial Number');</script>", false);
+                }
+
+            }
+        }
+        return false;
+    }
+
     protected void btnclear_Click(object sender, ImageClickEventArgs e)
     {
        // txtbarcode.Text = "";
@@ -188,7 +237,12 @@ public partial class BottlePreLoadingPopup : System.Web.UI.Page
 
             if (MFRcodecountcheck(Convert.ToInt32(ViewState["Drgid"].ToString())))
             {
-                ScriptManager.RegisterClientScriptBlock(this.Page, typeof(Page), "popup", "passValueToParent('" + Convert.ToInt32(ViewState["Drgid"].ToString()) + "','" + Convert.ToInt32(ViewState["Carttype"].ToString()) + "','" + ViewState["BoxOrPallet"].ToString() + "')", true);
+                 ScriptManager.RegisterClientScriptBlock(this.Page, typeof(Page), "popup", "passValueToParent('" + Convert.ToInt32(ViewState["Drgid"].ToString()) + "','" + Convert.ToInt32(ViewState["Carttype"].ToString()) + "','" + ViewState["BoxOrPallet"].ToString() + "')", true);
+                //gs1Table.Visible = true;
+                //Fsttd.Visible = false;
+                //secondtd.Visible = false;
+                //txtgs1barcode.Text = "";
+                //txtgs1barcode.Focus();
             }
             else
             {               
@@ -253,6 +307,13 @@ public partial class BottlePreLoadingPopup : System.Web.UI.Page
                         if (dr[0].ToString().ToLower() == txtmfrbarcode.Text.Trim().ToLower())
                         {
                             bol = true;
+                            mfrBarcode = dr[0].ToString();
+                            return bol;
+                        }
+                        else if (dr[0].ToString().ToLower() == SerialNumber.Trim().ToLower())
+                        {
+                            bol = true;
+                            mfrBarcode = dr[0].ToString();
                             return bol;
                         }
                         else
@@ -351,17 +412,148 @@ public partial class BottlePreLoadingPopup : System.Web.UI.Page
 
     protected void btnbarcodesearch_Click(object sender, ImageClickEventArgs e)
     {
-        if (MFRcodecheck(Convert.ToInt32(ViewState["Drgid"].ToString())))
+        
+        int barcodeLength = txtmfrbarcode.Text.Length;
+        if (barcodeLength > 0)
         {
-            ScriptManager.RegisterClientScriptBlock(this.Page, typeof(Page), "popup", "passValueToParent('" + Convert.ToInt32(ViewState["Drgid"].ToString()) + "','" + Convert.ToInt32(ViewState["Carttype"].ToString()) + "','" + ViewState["BoxOrPallet"].ToString() + "')", true);
+            if ((txtmfrbarcode.Text.Trim() != "") && (checkGS1Barcode(txtmfrbarcode.Text)))
+            {
+                int returnValue = gs1barcode.GS1CodeCheck(txtmfrbarcode.Text.Trim(), ref ExpDate, ref BatchNumber, ref SerialNumber, ref ManufacturedDate);
+                ViewState["ExpDate"] = ExpDate.ToString();
+                ViewState["BatchNumber"] = BatchNumber.ToString();
+                ViewState["SerialNumber"] = SerialNumber.ToString();
+                if (returnValue == 1)
+                {
+                    ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('String doesn't contains any value after GTIN,Please check the Barcode string');</script>", false);
+                    txtmfrbarcode.Text = "";
+                }
+                else if (returnValue == 2)
+                {
+                    ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('String not belongs to GTIN AI,Please check the Barcode string');</script>", false);
+                    txtmfrbarcode.Text = "";
+                }
+                else if (returnValue == 3)
+                {
+                    ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('Not a Valid GS1 Barcode,Please check the Barcode string');</script>", false);
+                    txtmfrbarcode.Text = "";
+                }
+                else if (returnValue == 0)
+                {
+                    haveMFRCODE = MFRcodecheck(Convert.ToInt32(ViewState["Drgid"].ToString()));
+                    if (haveMFRCODE)
+                    {
+                        if ((SerialNumber != "") && (SerialNumber.ToUpper() == mfrBarcode.ToUpper()))
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.Page, typeof(Page), "popup", "passValuesToParent('" + Convert.ToInt32(ViewState["Drgid"].ToString()) + "','" + Convert.ToInt32(ViewState["Carttype"].ToString()) + "','" + ViewState["BoxOrPallet"].ToString() + "','" + (ViewState["ExpDate"].ToString()) + "','" + (ViewState["BatchNumber"].ToString()) + "')", true);
+                        }
+                    }
+                    else
+                    {
+                        threetd.Visible = false;
+                        //gs1Table.Visible = false;
+                        Fsttd.Visible = true;
+                        secondtd.Visible = true;
+                        ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('MFR Barcode Mismatch with a GS1 Serial Number');</script>", false);
+                    }
+
+                }
+            }
+            else if ((!checkGS1Barcode(txtmfrbarcode.Text)) && (MFRcodecheck(Convert.ToInt32(ViewState["Drgid"].ToString()))))
+            {
+                haveMFRCODE = MFRcodecheck(Convert.ToInt32(ViewState["Drgid"].ToString()));
+                if (haveMFRCODE)
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.Page, typeof(Page), "popup", "passValueToParent('" + Convert.ToInt32(ViewState["Drgid"].ToString()) + "','" + Convert.ToInt32(ViewState["Carttype"].ToString()) + "','" + ViewState["BoxOrPallet"].ToString() + "')", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('MFR Barcode Not Matched with a Configuration');</script>", false);
+                }
+            }
+            else
+            {
+                threetd.Visible = false;
+                //gs1Table.Visible = false;
+                Fsttd.Visible = true;
+                secondtd.Visible = true;
+                ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('Its not a GS1 Barcode and MFRBarcode Mismatch');</script>", false);
+
+            }
+        }
+       
+    }
+    public Boolean checkGS1Barcode(string GS1Barcode)
+    {
+        bool SI = false;
+        int barcodelength = GS1Barcode.Length;
+        if ((GS1Barcode != "") && (barcodelength > 3))
+        {
+            SymbolIdentifier = GS1Barcode.Substring(0, 3);
+            if ((SymbolIdentifier == "]E0") || (SymbolIdentifier == "]E1") || (SymbolIdentifier == "]E2") || (SymbolIdentifier == "]E3") || (SymbolIdentifier == "]E4") ||
+                         (SymbolIdentifier == "]I1") || (SymbolIdentifier == "]C1") || (SymbolIdentifier == "]e0") || (SymbolIdentifier == "]e1") || (SymbolIdentifier == "]e2") ||
+                         (SymbolIdentifier == "]d1") || (SymbolIdentifier == "]d2") || (SymbolIdentifier == "]Q3"))
+            {
+                return SI = true;
+            }
         }
         else
         {
-            threetd.Visible = false;
-            Fsttd.Visible = true;
-            secondtd.Visible = true;
-            //btnsearch.UseSubmitBehavior = true;
-            ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('Manufacture Barcode Mismatch');</script>", false);
-        }       
+
+        }
+        return SI;
     }
+    //protected void btngs1barcodesearch_Click(object sender, ImageClickEventArgs e)
+    //{
+
+    //    int barcodeLength = txtgs1barcode.Text.Length;
+    //    if (barcodeLength > 0)
+    //    {
+    //        if ((txtgs1barcode.Text.Trim() != "") && (checkGS1Barcode(txtgs1barcode.Text.Trim())))
+    //        {
+
+    //            int returnValue = gs1barcode.GS1CodeCheck(txtgs1barcode.Text.Trim(), ref ExpDate, ref BatchNumber, ref SerialNumber, ref ManufacturedDate);
+    //            ViewState["ExpDate"] = ExpDate.ToString();
+    //            ViewState["BatchNumber"] = BatchNumber.ToString();
+    //            ViewState["SerialNumber"] = SerialNumber.ToString();
+    //            if (returnValue == 0)
+    //            {
+    //                ScriptManager.RegisterClientScriptBlock(this.Page, typeof(Page), "popup", "passValuesToParent('" + Convert.ToInt32(ViewState["Drgid"].ToString()) + "','" + Convert.ToInt32(ViewState["Carttype"].ToString()) + "','" + ViewState["BoxOrPallet"].ToString() + "','" + (ViewState["ExpDate"].ToString()) + "','" + (ViewState["BatchNumber"].ToString()) + "')", true);
+    //                txtgs1barcode.Text = "";
+    //            }
+    //            else if (returnValue == 1)
+    //            {
+    //                ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('String doesn't contains any value after GTIN,Please check the Barcode string');</script>", false);
+    //                txtgs1barcode.Text = "";
+    //            }
+    //            else if (returnValue == 2)
+    //            {
+    //                ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('String not belongs to GTIN AI,Please check the Barcode string');</script>", false);
+    //                txtgs1barcode.Text = "";
+    //            }
+    //            else if (returnValue == 3)
+    //            {
+    //                ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('Not a Valid GS1 Barcode,Please check the Barcode string');</script>", false);
+    //                txtgs1barcode.Text = "";
+    //            }
+    //        }
+    //        else
+    //        {
+    //            ScriptManager.RegisterClientScriptBlock(this.Page, typeof(Page), "popup", "passValueToParent('" + Convert.ToInt32(ViewState["Drgid"].ToString()) + "','" + Convert.ToInt32(ViewState["Carttype"].ToString()) + "','" + ViewState["BoxOrPallet"].ToString() + "')", true);
+    //            // ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('Not a Valid GS1 Barcode');</script>", false);
+    //            threetd.Visible = false;
+    //            gs1Table.Visible = false;
+    //            Fsttd.Visible = true;
+    //            secondtd.Visible = true;
+    //        }
+    //    }
+        
+    //}
+
+    //protected void btngs1barcodecancel_Click(object sender, ImageClickEventArgs e)
+    //{
+    //ScriptManager.RegisterClientScriptBlock(this.Page, typeof(Page), "popup", "passValueToParent('" + Convert.ToInt32(ViewState["Drgid"].ToString()) + "','" + Convert.ToInt32(ViewState["Carttype"].ToString()) + "','" + ViewState["BoxOrPallet"].ToString() + "')", true);
+    //threetd.Visible = false;
+    //gs1Table.Visible = false;
+    //Fsttd.Visible = true;
+    //}
 }

@@ -164,7 +164,7 @@
 
         <td align="right" valign="top" style=" height: 70px;width:265px;">
           <asp:ImageMap ID="ImageMap5" runat="server" ImageUrl="~/Image/banner5.gif" 
-            Height="70px" Width="265px">
+             Height="70px" Width="265px">
         </asp:ImageMap>
         </td> 
    </tr>

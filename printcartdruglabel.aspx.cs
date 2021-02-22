@@ -84,6 +84,7 @@ public partial class printcartdruglabel : System.Web.UI.Page
                         txtpacksize.Text = dr[4].ToString();
                         txtuom.Text = dr[5].ToString();
                         txtbrand.Text = dr[6].ToString();
+          
                     }
                 }
             }

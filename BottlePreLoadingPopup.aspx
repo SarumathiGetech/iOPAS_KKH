@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="BottlePreLoadingPopup.aspx.cs" Inherits="BottlePreLoadingPopup" %>
+﻿<%@ Page Language="C#" ValidateRequest="false" AutoEventWireup="true" CodeFile="BottlePreLoadingPopup.aspx.cs" Inherits="BottlePreLoadingPopup" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -14,7 +14,7 @@
         window.close();
     }
 
-    function passValueToParent(val,Val2,Val3) {
+    function passValueToParent(val,Val2,Val3,Val4,Val5) {
         window.opener.document.getElementById('ctl00_ContentPlaceHolder1_searchvalue').value = val;
         window.opener.document.getElementById('ctl00_ContentPlaceHolder1_txtcarttype').value = Val2;
         window.opener.document.getElementById('ctl00_ContentPlaceHolder1_txt_Box_Or_Pallet').value = Val3;
@@ -22,7 +22,16 @@
         window.open('Preloadpopup.aspx', 'search', 'menubar=no,center:yes,scrollbars=no,width=620,height=500[color=blue]40,top=100,left=200')
         window.close();
     }
-
+    function passValuesToParent(val, Val2, Val3, Val4, Val5) {
+        window.opener.document.getElementById('ctl00_ContentPlaceHolder1_searchvalue').value = val;
+        window.opener.document.getElementById('ctl00_ContentPlaceHolder1_txtcarttype').value = Val2;
+        window.opener.document.getElementById('ctl00_ContentPlaceHolder1_txt_Box_Or_Pallet').value = Val3;
+        window.opener.document.getElementById('ctl00_ContentPlaceHolder1_txtexpdate1').value = Val4;
+        window.opener.document.getElementById('ctl00_ContentPlaceHolder1_txtbatchno1').value = Val5;
+        window.opener.document.getElementById('ctl00_ContentPlaceHolder1_btnok').click();
+        window.open('Preloadpopup.aspx', 'search', 'menubar=no,center:yes,scrollbars=no,width=620,height=500[color=blue]40,top=100,left=200')
+        window.close();
+    }
 
     // Search Window open using Enter Key \\ 
     function doClick(e) {
@@ -53,6 +62,36 @@
             event.keyCode = 0
         }
     }
+
+    <%--function doClick3(e) {
+        var key;
+
+        if (window.event)
+            key = window.event.keyCode;     //IE
+        else
+            key = e.which;     //firefox
+
+        if (key == 13) {
+            document.getElementById('<%=btngs1barcodesearch.ClientID%>').click();
+             event.keyCode = 0
+         }
+    }--%>
+
+
+   <%-- function doClick4(e) {
+        var key;
+
+        if (window.event)
+            key = window.event.keyCode;     //IE
+        else
+            key = e.which;     //firefox
+
+        if (key == 13) {
+            document.getElementById('<%=btngs1barcodecancel.ClientID%>').click();
+            event.keyCode = 0
+        }
+    }--%>
+
 </script>
 </head>
 <body style="background-color:#D2FECF">
@@ -206,20 +245,23 @@
      
      <tr>
      <td >
-     <table id="threetd" runat="server" align="center" cellpadding="0" cellspacing="0" border="0">
-     <tr>
+     <table id="threetd" runat="server" cellpadding="0" align="center" cellspacing="0" border="0">
+      <tr>
      <td align="left">
-     <asp:Label ID="lblmfrbarcode" runat="server" CssClass="labelall" Text="MFR Barcode" Width="120px"></asp:Label>
-     </td>
+     <asp:Label ID="lblmfrbarcode" runat="server" CssClass="labelall tdalign" Text="MFR/GS1 Barcode" Width="110px"></asp:Label>
+    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
+                ControlToValidate="txtmfrbarcode" ErrorMessage="*" SetFocusOnError="True" ValidationGroup="barcode"
+                ></asp:RequiredFieldValidator>
+         </td>
    
      <td>
-     <asp:TextBox ID="txtmfrbarcode" runat="server" CssClass="textbox" Width="250px" AutoCompleteType="Disabled"></asp:TextBox>
+     <asp:TextBox ID="txtmfrbarcode" runat="server" CssClass="textbox" Width="510px" AutoCompleteType="Disabled"></asp:TextBox>
      </td>
    <td>
   
    <asp:ImageButton ID="btnbarcodesearch" runat="server" CssClass="btn" 
-           ImageUrl="~/ButtonImages/Search.png" Height="20px" 
-           onclick="btnbarcodesearch_Click"  />    
+           ImageUrl="~/ButtonImages/Search.png" Height="22px" 
+           onclick="btnbarcodesearch_Click" ValidationGroup="barcode" />    
    </td>
      </tr>
      </table> 
@@ -227,6 +269,34 @@
 
      </td>
      </tr> 
+
+ <tr>
+     <td>
+     <%--<table id="gs1Table" runat="server" cellpadding="0" align="center" cellspacing="1" border="0">
+     <tr>
+		 <td class="gs1style">
+		 <asp:Label ID="lblgs1barcode" runat="server" CssClass="labelall tdalign" Text="GS1 Barcode" Width="80px"></asp:Label>
+		<asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" 
+                ControlToValidate="txtgs1barcode" ErrorMessage="*" SetFocusOnError="True" ValidationGroup="barcode"
+                ></asp:RequiredFieldValidator>
+             </td>
+   
+		 <td>
+		 <asp:TextBox ID="txtgs1barcode" runat="server" CssClass="textbox" Width="500px" AutoCompleteType="Disabled"></asp:TextBox>
+		 </td>
+          <td>
+		   <asp:ImageButton ID="btngs1barcodesearch" runat="server" CssClass="btn" 
+					ImageUrl="~/ButtonImages/Search.png" ValidationGroup="barcode" onclick="btngs1barcodesearch_Click" Height="22px"/>
+		   </td>
+         <td>
+		   <asp:ImageButton ID="btngs1barcodecancel" runat="server" CssClass="btn" 
+					ImageUrl="~/ButtonImages/Cancel.png" onclick="btngs1barcodecancel_Click" Height="21px"/>
+		   </td>
+     </tr>
+     </table> --%>
+  
+	</td>
+ </tr>
      </td>
      </tr>  
      </table>
