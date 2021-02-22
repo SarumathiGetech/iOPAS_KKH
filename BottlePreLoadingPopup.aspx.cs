@@ -180,7 +180,10 @@ public partial class BottlePreLoadingPopup : System.Web.UI.Page
                 {
                     ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('MFR Barcode Mismatch with a GS1 Serial Number');</script>", false);
                 }
-
+            }
+            else
+            {
+                ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert(Its not a GS1 Barcode and MFRBarcode Mismatch');</script>", false);
             }
         }
         return false;

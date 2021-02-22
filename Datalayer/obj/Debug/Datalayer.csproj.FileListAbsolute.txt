@@ -47,3 +47,9 @@ E:\Projects\iOPAS\iOPAS_KKH\Datalayer\obj\Debug\Datalayer.csprojAssemblyReferenc
 E:\Projects\iOPAS\iOPAS_KKH\Datalayer\obj\Debug\Datalayer.csproj.CoreCompileInputs.cache
 E:\Projects\iOPAS\iOPAS_KKH\Datalayer\obj\Debug\Datalayer.dll
 E:\Projects\iOPAS\iOPAS_KKH\Datalayer\obj\Debug\Datalayer.pdb
+E:\KKH_iOPAS_Project\iOPAS_KKH\Datalayer\bin\Debug\Datalayer.dll
+E:\KKH_iOPAS_Project\iOPAS_KKH\Datalayer\bin\Debug\Datalayer.pdb
+E:\KKH_iOPAS_Project\iOPAS_KKH\Datalayer\obj\Debug\Datalayer.csprojAssemblyReference.cache
+E:\KKH_iOPAS_Project\iOPAS_KKH\Datalayer\obj\Debug\Datalayer.csproj.CoreCompileInputs.cache
+E:\KKH_iOPAS_Project\iOPAS_KKH\Datalayer\obj\Debug\Datalayer.dll
+E:\KKH_iOPAS_Project\iOPAS_KKH\Datalayer\obj\Debug\Datalayer.pdb
