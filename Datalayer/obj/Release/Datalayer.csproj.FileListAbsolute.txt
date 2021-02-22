@@ -28,3 +28,4 @@ E:\KKH_iOPAS_Project\iOPAS_KKH\Datalayer\bin\Release\Datalayer.pdb
 E:\KKH_iOPAS_Project\iOPAS_KKH\Datalayer\obj\Release\Datalayer.csproj.CoreCompileInputs.cache
 E:\KKH_iOPAS_Project\iOPAS_KKH\Datalayer\obj\Release\Datalayer.dll
 E:\KKH_iOPAS_Project\iOPAS_KKH\Datalayer\obj\Release\Datalayer.pdb
+E:\KKH_iOPAS_Project\iOPAS_KKH\Datalayer\obj\Release\Datalayer.csprojAssemblyReference.cache

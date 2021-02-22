@@ -165,6 +165,7 @@ public partial class BottlePreLoadingPopup : System.Web.UI.Page
     public Boolean GS1BarcodeExtractMFRCode()
     {
         int barcodeLength = txtmfrcode.Text.Length;
+        bool gs1bol = false;
         if (barcodeLength > 0)
         {
             if ((txtmfrcode.Text.Trim() != "") && (checkGS1Barcode(txtmfrcode.Text.Trim())))
@@ -174,19 +175,14 @@ public partial class BottlePreLoadingPopup : System.Web.UI.Page
                 if (returnValue == 0)
                 {
                     bottlepreloadmfrbarcode = SerialNumber.Trim();
-                    return true;
+                    gs1bol = true;
                 }
-                else
-                {
-                    ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('MFR Barcode Mismatch with a GS1 Serial Number');</script>", false);
+                else{
+                    gs1bol = false;
                 }
-            }
-            else
-            {
-                ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert(Its not a GS1 Barcode and MFRBarcode Mismatch');</script>", false);
             }
         }
-        return false;
+        return gs1bol;
     }
 
     protected void btnclear_Click(object sender, ImageClickEventArgs e)
