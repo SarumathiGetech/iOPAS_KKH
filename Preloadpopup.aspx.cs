@@ -717,7 +717,7 @@ public partial class Preloadpopup : System.Web.UI.Page
                     haveMFRCODE = MFRcodecheck(Convert.ToInt32(ViewState["Drgid"].ToString()));
                     if (haveMFRCODE)
                     {
-                        if ((SerialNumber != "") && (SerialNumber == mfrBarcode))
+                        if ((SerialNumber.ToString().ToUpper()!= "") && (SerialNumber.ToString().ToUpper() == mfrBarcode.ToUpper()))
                         {
                             ScriptManager.RegisterClientScriptBlock(this.Page, typeof(Page), "popup", "passValuesToParent('" + Convert.ToInt32(ViewState["Drgid"].ToString()) + "','" + (ViewState["ExpDate"].ToString()) + "','" + (ViewState["BatchNumber"].ToString()) + "')", true);
                         }

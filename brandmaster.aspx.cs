@@ -68,7 +68,7 @@ public partial class brandmaster : System.Web.UI.Page
                 if (txtmfrcode.Text.Trim() != "")
                 {
                     mfrcodecheck();
-                    if (mfrbarcode != txtmfrcode.Text.Trim())
+                    if (mfrbarcode.Trim().ToUpper() != txtmfrcode.Text.Trim().ToUpper())
                     {
                         foreach (ListItem itemins in lstbox.Items)
                         {
@@ -97,7 +97,7 @@ public partial class brandmaster : System.Web.UI.Page
                             txtmfrcode.Focus();
                         }
                     }
-                    else if (mfrbarcode == txtmfrcode.Text.Trim())
+                    else if (mfrbarcode.Trim().ToUpper() == txtmfrcode.Text.Trim().ToUpper())
                     {
                         txtmfrcode.Text = "";
                         ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('MFR Barcode already exist');</script>", false);
@@ -115,7 +115,7 @@ public partial class brandmaster : System.Web.UI.Page
             if (txtmfrcode.Text.Trim() != "")
             {
                 mfrcodecheck();
-                if (mfrbarcode != txtmfrcode.Text.Trim())
+                if (mfrbarcode.Trim().ToUpper() != txtmfrcode.Text.Trim().ToUpper())
                 {
                     foreach (ListItem itemins in lstbox.Items)
                     {
@@ -144,7 +144,7 @@ public partial class brandmaster : System.Web.UI.Page
                         txtmfrcode.Focus();
                     }
                 }
-                else if (mfrbarcode == txtmfrcode.Text.Trim())
+                else if (mfrbarcode.Trim().ToUpper() == txtmfrcode.Text.Trim().ToUpper())
                 {
                     txtmfrcode.Text = "";
                     ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('MFR Barcode already exist');</script>", false);
@@ -283,7 +283,7 @@ public partial class brandmaster : System.Web.UI.Page
         }
         else if (Rtnvalue == 2)
         {
-            ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('Brand is running in DDS/BDS . Disable and remove cartridge from DDS/BDS and try again');</script>", false);
+            ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('Brand is running in DDS/BDS . Disable and remove cartridge from DDS/BDS and try again.Added and Removed MFRBARCODE in the BrandMaster Screen ');</script>", false);
         }
         else
         {
