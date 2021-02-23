@@ -74,3 +74,9 @@ Ver 1.0.0.29 3-Dec-2020
 <httpRuntime requestValidationMode="2.0" /> in Webconfig
 GS1 Label Barcode Enhancement - Based on MFR barcode/GS1 barcode ,it will autopopulate the ExpiryDate and Batch Number 
  or manually need to enter the ExpiryDate and Batch Number
+
+Ver 1.0.0.30 23-Feb-2021
+When user scan a barcode on MFR Barcode textbox in the Preloading Item search, system says that item not found bug fixed
+User not configured MFR/GS1 barcode in the Drug Master and Upon selecting the item from the Preloading Item Search, 
+System not allowed to preload the items without GS1 barcode bug fixed.
+

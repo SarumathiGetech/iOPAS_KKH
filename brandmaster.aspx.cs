@@ -283,7 +283,7 @@ public partial class brandmaster : System.Web.UI.Page
         }
         else if (Rtnvalue == 2)
         {
-            ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('Brand is running in DDS/BDS . Disable and remove cartridge from DDS/BDS and try again.Added and Removed MFRBARCODE in the BrandMaster Screen ');</script>", false);
+            ScriptManager.RegisterStartupScript(this, typeof(Page), "Alert", "<script>alert('Brand is running in DDS/BDS . Disable and remove cartridge from DDS/BDS and try again.\\nBut, MFR Code Add/Remove succeed');</script>", false);
         }
         else
         {
